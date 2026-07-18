@@ -1,6 +1,5 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 import time
 from locators import (
@@ -14,6 +13,7 @@ from locators import (
     INPUT_AD_DESCRIPTION,
     INPUT_AD_PRICE,
     INPUT_AD_CATEGORY,
+    INPUT_AD_CONDITION,
     INPUT_AD_CITY,
     BUTTON_PUBLISH,
     AD_TITLE
@@ -185,9 +185,7 @@ def test_authorized_user_ad_creation(driver):
         "Заполнение категории объявления"
     )
 
-    # Условие (например, радиокнопка)
-    # Используем CSS_SELECTOR из вашего оригинального кода
-    ad_condition_selector = (By.CSS_SELECTOR, ".radioUnput_shell__Wtdwe label.h2")
+    ad_condition_selector = INPUT_AD_CONDITION
     safe_action_on_element(
         driver, wait,
         EC.visibility_of_element_located(ad_condition_selector),

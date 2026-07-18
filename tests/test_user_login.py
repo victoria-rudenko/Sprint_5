@@ -1,0 +1,54 @@
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from locators import (
+    BUTTON_LOGIN_REGISTER,
+    INPUT_EMAIL_LOGIN,
+    INPUT_PWD_LOGIN,
+    BUTTON_LOGIN,
+    ELEMENT_AVATAR_USER,
+    ELEMENT_USERNAME_DISPLAY
+)
+
+class TestUserLogin:
+
+    def test_authorized_user_ad_creation(self, driver):
+        wait = WebDriverWait(driver, 15)
+
+        driver.get("https://qa-desk.education-services.ru/")
+        driver.maximize_window()
+
+        # Ожидание полной загрузки начальной страницы
+        wait.until(lambda driver: driver.execute_script("return document.readyState") == "complete")
+
+        login_register_button = wait.until(
+            EC.element_to_be_clickable(BUTTON_LOGIN_REGISTER)
+        )
+        login_register_button.click()
+
+        email_login_input = wait.until(
+            EC.presence_of_element_located(INPUT_EMAIL_LOGIN)
+        )
+        email_login_input.send_keys("abc@bcd.ru")
+        password_input = wait.until(
+            EC.presence_of_element_located(INPUT_PWD_LOGIN)
+        )
+        password_input.send_keys("123")
+
+        login_register_button = wait.until(
+            EC.element_to_be_clickable(BUTTON_LOGIN)
+        )
+        login_register_button.click()
+
+        wait.until(lambda d: d.current_url == "https://qa-desk.education-services.ru/login")
+
+        avatar_element_locator = ELEMENT_AVATAR_USER
+        username_element_locator = ELEMENT_USERNAME_DISPLAY
+
+        avatar_element = wait.until(
+            EC.visibility_of_element_located(avatar_element_locator)
+        )
+
+        username_element = wait.until(
+            EC.visibility_of_element_located(username_element_locator)
+        )
+        assert username_element.text == "User.", f"Ожидалось имя 'User.', получено '{username_element.text}'"
