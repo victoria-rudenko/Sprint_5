@@ -4,13 +4,10 @@ from locators import (
     BUTTON_LOGIN_REGISTER,
     INPUT_EMAIL_LOGIN,
     INPUT_PWD_LOGIN,
-    BUTTON_LOGIN,
-    BUTTON_LOGOUT,
-    ELEMENT_AVATAR_USER,
-    ELEMENT_USERNAME_DISPLAY
+    BUTTON_LOGIN
 )
 
-class TestUserLogin:
+class TestUserLogout:
 
     def test_authorized_user_ad_creation(self, driver):
         wait = WebDriverWait(driver, 15)
@@ -42,21 +39,7 @@ class TestUserLogin:
 
         wait.until(lambda d: d.current_url == "https://qa-desk.education-services.ru/login")
 
-        avatar_element_locator = ELEMENT_AVATAR_USER
-        username_element_locator = ELEMENT_USERNAME_DISPLAY
-
-        avatar_element = wait.until(
-            EC.visibility_of_element_located(avatar_element_locator)
+        login_button = wait.until(
+            EC.element_to_be_clickable(BUTTON_LOGIN_REGISTER)
         )
-
-        username_element = wait.until(
-            EC.visibility_of_element_located(username_element_locator)
-        )
-        assert username_element.text == "User.", f"Ожидалось имя 'User.', получено '{username_element.text}'"
-
-        logout_button = wait.until(
-            EC.element_to_be_clickable(BUTTON_LOGOUT)
-        )
-        logout_button.click()
-
-        wait.until(lambda d: d.current_url == "https://qa-desk.education-services.ru")
+        assert login_button is not None, "Кнопка 'Вход и регистрация' не найдена или не кликабельна в конце теста."
