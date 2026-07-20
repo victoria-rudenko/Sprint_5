@@ -32,11 +32,8 @@ class TestAdCreation:
         )
         create_ad_button.click()
 
-        modal_auth_required_element = wait.until(
-            EC.visibility_of_element_located(AUTHORIZATION_REQUIRED_HEADER)
-        )
-
-        assert modal_auth_required_element.is_displayed(), "Модальное окно 'Авторизация обязательна' не отображается после попытки создания объявления без авторизации."
+        assert wait.until(EC.visibility_of_element_located(
+            AUTHORIZATION_REQUIRED_HEADER)).is_displayed(), "Модальное окно 'Авторизация обязательна' не отображается после попытки создания объявления без авторизации."
 
 def test_authorized_user_ad_creation(self, driver):
     wait = WebDriverWait(driver, 15)

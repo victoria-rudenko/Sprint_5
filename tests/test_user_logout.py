@@ -40,7 +40,5 @@ class TestUserLogout:
 
         wait.until(lambda d: d.current_url == LOGIN_URL)
 
-        login_button = wait.until(
-            EC.element_to_be_clickable(BUTTON_LOGIN_REGISTER)
-        )
-        assert login_button is not None, "Кнопка 'Вход и регистрация' не найдена или не кликабельна в конце теста."
+        assert wait.until(EC.element_to_be_clickable(
+            BUTTON_LOGIN_REGISTER)) is not None, "Кнопка 'Вход и регистрация' не найдена или не кликабельна в конце теста."

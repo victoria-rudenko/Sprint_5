@@ -95,11 +95,8 @@ class TestUserRegistration:
         )
         create_account_button.click()
 
-        error_element = wait.until(
-            expected_conditions.visibility_of_element_located(ERROR_MESSAGE)
-        )
-
-        assert error_element.text == "Ошибка", f"Ожидалась ошибка при некорректном email для регистрации"
+        assert wait.until(expected_conditions.visibility_of_element_located(
+            ERROR_MESSAGE)).text == "Ошибка", f"Ожидалась ошибка при некорректном email для регистрации"
 
     def test_existing_user_registration(self, driver):
         wait = WebDriverWait(driver, 5)
