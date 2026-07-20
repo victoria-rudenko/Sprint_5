@@ -1,7 +1,6 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
-import time
+from utils import safe_action_on_element
 from locators import (
     BUTTON_CREATE_AD,
     AUTHORIZATION_REQUIRED_HEADER,
@@ -35,69 +34,6 @@ class TestAdCreation:
         )
 
         assert modal_auth_required_element.is_displayed(), "Модальное окно 'Авторизация обязательна' не отображается после попытки создания объявления без авторизации."
-
-def safe_action_on_element(driver, wait, condition, action_func, timeout_message=""):
-    """
-    _________________________________________________________________________________________________
-    !!! Коллеги из Яндекс Практикум!!!
-    Сайт https://qa-desk.education-services.ru/ КРАЙНЕ НЕСТАБИЛЕН с точки зрения динамического изменения DOM
-    сразу после загрузки. JavaScript на странице продолжает активно работать даже после того,
-    как document.readyState становится complete, перерисовывая элементы и
-    делая ранее найденные элементы "протухшими".
-
-    Cтандартные ожидания не помогают.
-
-    Согласно документации Selenium в разделе "Possible Solutions" для случая "The DOM has changed":
-    Always relocate the element every time you go to use it.
-
-    Я реализовала логику повтора попытки найти элемент, если он оказывается "протухшим", с помощью
-    цикла while и блока try...except.
-
-    Это было очень трудозатратно, тесты получаются хрупкими,
-    прошу пересмотреть реализацию https://qa-desk.education-services.ru/ ,
-    чтобы JavaScript не перерисовывал DOM постоянно.
-    __________________________________________________________________________________________________
-    Функция-обертка для безопасного выполнения действия с элементом,
-    обрабатывающая StaleElementReferenceException.
-
-    Args:
-        driver: Экземпляр WebDriver.
-        wait: Экземпляр WebDriverWait.
-        condition: Условие ExpectedConditions для поиска элемента (например, EC.element_to_be_clickable(locator)).
-        action_func: Функция, принимающая элемент и выполняющая над ним действие (например, lambda e: e.click()).
-        timeout_message: Сообщение для таймаута.
-
-    Returns:
-        Найденный WebElement, если действие выполнено успешно.
-
-    Raises:
-        TimeoutException: Если действие не выполнено за отведенное время ожидания.
-        Другие исключения: Если возникают исключения, кроме StaleElementReferenceException.
-    """
-    start_time = time.time()
-    max_time = start_time + wait._timeout
-
-    while time.time() < max_time:
-        try:
-            # Повторно ищем элемент каждый раз перед действием
-            element = wait.until(condition)
-            # Пытаемся выполнить действие
-            action_func(element)
-            # Если действие прошло успешно, возвращаем элемент
-            return element
-        except StaleElementReferenceException:
-            print(f"Элемент стал протухшим при выполнении действия ('{timeout_message}'), повторный поиск...")
-            # Небольшая задержка, чтобы не грузить CPU
-            time.sleep(0.1)
-            continue  # Переход к следующей итерации цикла для поиска нового элемента
-        except Exception as e:
-            # Пробрасываем другие исключения, например, TimeoutException от wait.until
-            # или исключения от самого action_func, если они не StaleElementReferenceException
-            raise e
-
-    # Если цикл завершился по таймауту, выбрасываем исключение
-    raise TimeoutException(f"Не удалось выполнить действие за отведённое время ({wait._timeout}s). {timeout_message}")
-
 
 def test_authorized_user_ad_creation(driver):
     wait = WebDriverWait(driver, 15)
