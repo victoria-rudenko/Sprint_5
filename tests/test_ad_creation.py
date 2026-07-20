@@ -1,6 +1,6 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from utils import safe_action_on_element
+from utils import safe_action_on_element, check_element_displayed
 from constants import (
     BASE_URL
 )
@@ -160,11 +160,6 @@ def test_authorized_user_ad_creation(self, driver):
         "Поиск заголовка объявления на главной странице"
     )
 
-    # Проверить, что элемент отображается (это действие тоже может стать причиной StaleElementException)
-    # Обернем проверку в ту же логику
-    def check_element_displayed(element):
-        if not element.is_displayed():
-            raise AssertionError("Объявление не опубликовано: элемент заголовка не отображается.")
 
     safe_action_on_element(
         driver, wait,
@@ -172,4 +167,3 @@ def test_authorized_user_ad_creation(self, driver):
         check_element_displayed,  # Функция проверяет отображение
         "Проверка видимости заголовка объявления"
     )
-    # Если safe_action_on_element не выбросил исключение, значит проверка прошла.

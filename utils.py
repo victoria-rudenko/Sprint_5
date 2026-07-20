@@ -48,3 +48,7 @@ def email_generator():
     random_name = ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=7))
     random_domain = ''.join(random.choices(string.ascii_lowercase, k=3))
     return f"{random_name}@{random_name}.{random_domain}"
+
+def check_element_displayed(element):
+    if not element.is_displayed():
+        raise AssertionError("Объявление не опубликовано: элемент заголовка не отображается.")
