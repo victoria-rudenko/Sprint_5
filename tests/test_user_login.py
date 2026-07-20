@@ -1,5 +1,9 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from constants import (
+    BASE_URL,
+    LOGIN_URL
+)
 from locators import (
     BUTTON_LOGIN_REGISTER,
     INPUT_EMAIL_LOGIN,
@@ -15,7 +19,7 @@ class TestUserLogin:
     def test_authorized_user_ad_creation(self, driver):
         wait = WebDriverWait(driver, 15)
 
-        driver.get("https://qa-desk.education-services.ru/")
+        driver.get(BASE_URL)
         driver.maximize_window()
 
         # Ожидание полной загрузки начальной страницы
@@ -40,7 +44,7 @@ class TestUserLogin:
         )
         login_register_button.click()
 
-        wait.until(lambda d: d.current_url == "https://qa-desk.education-services.ru/login")
+        wait.until(lambda d: d.current_url == LOGIN_URL)
 
         avatar_element_locator = ELEMENT_AVATAR_USER
         username_element_locator = ELEMENT_USERNAME_DISPLAY
@@ -59,4 +63,4 @@ class TestUserLogin:
         )
         logout_button.click()
 
-        wait.until(lambda d: d.current_url == "https://qa-desk.education-services.ru")
+        wait.until(lambda d: d.current_url == BASE_URL)
