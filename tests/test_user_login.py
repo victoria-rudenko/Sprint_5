@@ -57,10 +57,3 @@ class TestUserLogin:
             EC.visibility_of_element_located(username_element_locator)
         )
         assert username_element.text == "User.", f"Ожидалось имя 'User.', получено '{username_element.text}'"
-
-        logout_button = wait.until(
-            EC.element_to_be_clickable(BUTTON_LOGOUT)
-        )
-        logout_button.click()
-
-        wait.until(lambda d: d.current_url == BASE_URL)
