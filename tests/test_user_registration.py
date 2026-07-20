@@ -1,7 +1,7 @@
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
-import random
-import string
+from utils import email_generator
+from constants import *
 from locators import (
     BUTTON_LOGIN_REGISTER,
     BUTTON_NO_ACCOUNT,
@@ -15,20 +15,12 @@ from locators import (
     BUTTON_LOGOUT
 )
 
-
-def email_generator():
-    # Генерация случайного email соответствующего маске *******@*******.***
-    random_name = ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=7))
-    random_domain = ''.join(random.choices(string.ascii_lowercase, k=3))
-    return f"{random_name}@{random_name}.{random_domain}"
-
-
 class TestUserRegistration:
 
     def test_user_registration(self, driver):
         wait = WebDriverWait(driver, 5)
 
-        driver.get("https://qa-desk.education-services.ru/")
+        driver.get(BASE_URL)
         driver.maximize_window()
         login_register_button = wait.until(
             expected_conditions.element_to_be_clickable(BUTTON_LOGIN_REGISTER)
@@ -57,7 +49,7 @@ class TestUserRegistration:
         )
         create_account_button.click()
 
-        wait.until(lambda d: d.current_url == "https://qa-desk.education-services.ru/regiatration")
+        wait.until(lambda d: d.current_url == REGISTRATION_URL)
 
         avatar_element_locator = ELEMENT_AVATAR_USER
         username_element_locator = ELEMENT_USERNAME_DISPLAY
@@ -74,7 +66,7 @@ class TestUserRegistration:
     def test_incorrect_email_user_registration(self, driver):
         wait = WebDriverWait(driver, 10)
 
-        driver.get("https://qa-desk.education-services.ru/")
+        driver.get(BASE_URL)
         driver.maximize_window()
         login_register_button = wait.until(
             expected_conditions.element_to_be_clickable(BUTTON_LOGIN_REGISTER)
@@ -113,7 +105,7 @@ class TestUserRegistration:
         wait = WebDriverWait(driver, 5)
 
         # Сначала регистрируем нового пользователя
-        driver.get("https://qa-desk.education-services.ru/")
+        driver.get(BASE_URL)
         driver.maximize_window()
         login_register_button = wait.until(
             expected_conditions.element_to_be_clickable(BUTTON_LOGIN_REGISTER)
@@ -142,7 +134,7 @@ class TestUserRegistration:
         )
         create_account_button.click()
 
-        wait.until(lambda d: d.current_url == "https://qa-desk.education-services.ru/regiatration")
+        wait.until(lambda d: d.current_url == REGISTRATION_URL)
 
         avatar_element_locator = ELEMENT_AVATAR_USER
         username_element_locator = ELEMENT_USERNAME_DISPLAY

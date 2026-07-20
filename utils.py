@@ -1,5 +1,7 @@
 import time
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+import random
+import string
 
 def safe_action_on_element(driver, wait, condition, action_func, timeout_message=""):
     """
@@ -40,3 +42,9 @@ def safe_action_on_element(driver, wait, condition, action_func, timeout_message
 
     # Если цикл завершился по таймауту, выбрасываем исключение
     raise TimeoutException(f"Не удалось выполнить действие за отведённое время ({wait._timeout}s). {timeout_message}")
+
+def email_generator():
+    # Генерация случайного email соответствующего маске *******@*******.***
+    random_name = ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=7))
+    random_domain = ''.join(random.choices(string.ascii_lowercase, k=3))
+    return f"{random_name}@{random_name}.{random_domain}"
