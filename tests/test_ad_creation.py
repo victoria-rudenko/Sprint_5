@@ -1,6 +1,9 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from utils import safe_action_on_element
+from constants import (
+    BASE_URL
+)
 from locators import (
     BUTTON_CREATE_AD,
     AUTHORIZATION_REQUIRED_HEADER,
@@ -22,7 +25,7 @@ class TestAdCreation:
     def test_unauthorized_user_ad_creation(self, driver):
         wait = WebDriverWait(driver, 5)
 
-        driver.get("https://qa-desk.education-services.ru/")
+        driver.get(BASE_URL)
         driver.maximize_window()
         create_ad_button = wait.until(
             EC.element_to_be_clickable(BUTTON_CREATE_AD)
@@ -35,10 +38,10 @@ class TestAdCreation:
 
         assert modal_auth_required_element.is_displayed(), "Модальное окно 'Авторизация обязательна' не отображается после попытки создания объявления без авторизации."
 
-def test_authorized_user_ad_creation(driver):
+def test_authorized_user_ad_creation(self, driver):
     wait = WebDriverWait(driver, 15)
 
-    driver.get("https://qa-desk.education-services.ru/")
+    driver.get(BASE_URL)
     driver.maximize_window()
 
     # Ожидание полной загрузки начальной страницы
@@ -147,7 +150,7 @@ def test_authorized_user_ad_creation(driver):
 
     # --- Проверка результата ---
     # Ожидаем возврата на главную страницу
-    wait.until(lambda d: d.current_url == "https://qa-desk.education-services.ru/")
+    wait.until(lambda d: d.current_url == BASE_URL)
 
     # Повторно ждем загрузки страницы после публикации
     wait.until(lambda driver: driver.execute_script("return document.readyState") == "complete")
@@ -173,5 +176,3 @@ def test_authorized_user_ad_creation(driver):
         "Проверка видимости заголовка объявления"
     )
     # Если safe_action_on_element не выбросил исключение, значит проверка прошла.
-
-    print("Тест успешно завершен: объявление опубликовано и видимо на главной странице.")
