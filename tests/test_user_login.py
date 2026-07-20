@@ -16,7 +16,7 @@ from locators import (
 
 class TestUserLogin:
 
-    def test_authorized_user_ad_creation(self, driver):
+    def test_user_login(self, driver):
         wait = WebDriverWait(driver, 15)
 
         driver.get(BASE_URL)
