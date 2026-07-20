@@ -167,3 +167,6 @@ def test_authorized_user_ad_creation(self, driver):
         check_element_displayed,  # Функция проверяет отображение
         "Проверка видимости заголовка объявления"
     )
+
+    assert wait.until(EC.visibility_of_element_located(
+        AD_TITLE)).is_displayed(), "Созданное объявление не отображается."
